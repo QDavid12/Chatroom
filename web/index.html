@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatroom</title>
+    <meta charset="utf-8"/>
+    <style>
+        *{
+            margin: 0;
+            border: 0;
+            padding: 0;
+        }
+        html, body{
+            width: 100%;
+            height: 100%;
+        }
+        .container{
+            width: 90%;
+            height: 60%;
+            margin: 0 auto;
+            background: #eee;
+            overflow: auto;
+        }
+        button{
+            width: 60px;
+            height: 30px;
+            font-size: 20px;
+            background: white;
+            border-radius: 5px;
+            color: #666;
+            border: 2px solid #333;
+        }
+        textarea{
+            border: 2px solid #666;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="head">
+        <span class="title">系统消息：</span>
+        <span id="sys">暂无消息</span>
+    </div>
+    <div class="container" id="content">
+
+    </div>
+    <div class="input">
+        <textarea id="message"></textarea>
+        <button id="submit">提交</button>
+    </div>
+    <div class="login" id="login-container">
+        <input id="username" type="text" placeholder="username"/>
+        <button id="login">进入</button>
+    </div>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        var Chat = (function(){
+            var gettingHistory = true;
+            var socket;
+            var userid;
+            var username;
+            var isLogin = false;
+            var sys = document.getElementById("sys");
+            var content = document.getElementById("content");
+            var loginButton = document.getElementById("login");
+            var message = document.getElementById("message");
+            var submit = document.getElementById("submit");
+            var user = document.getElementById("username");
+            var loginContainer = document.getElementById("login-container");
+            function init(){
+                socket = io.connect("ws://"+window.location.host);
+                socket.on('message', function(obj){
+                    var message = document.createElement("div");
+                    message.innerHTML = obj.username + "：" + obj.content;
+                    content.appendChild(message);
+                    console.log(obj);
+                });
+                socket.on('history', function(messages){
+                    if(gettingHistory==false) return;
+                    console.log(messages);
+                    for(var x in messages){
+                        var obj = messages[x];
+                        var message = document.createElement("div");
+                        message.innerHTML = obj.username + "：" + obj.content;
+                        content.appendChild(message);
+                    }
+                    gettingHistory = false;
+                });
+                socket.on('login', function(obj){
+                    sys.innerHTML = obj.user.username + " 加入了聊天室";
+                    console.log(obj);
+                });
+                socket.on('logout', function(obj){
+                    sys.innerHTML = obj.user.username + " 退出了聊天室";
+                    console.log(obj);
+                });
+                submit.onclick = function(){
+                    Chat.send();
+                };
+                message.onkeyup = function(e){
+                    e = e || event;
+                    if (e.keyCode === 13) {
+                        Chat.send();
+                    }
+                };
+                loginButton.onclick = function(){
+                    Chat.login();
+                };
+                user.onkeyup = function(e){
+                    e = e || event;
+                    if (e.keyCode === 13) {
+                        Chat.login();
+                    }
+                };
+                socket.emit("history");
+                gettingHistory = true;
+            }
+            function login(){
+                if(user.value!=""){
+                    username = user.value;
+                    socket.emit("login", {userid: (new Date()).toString(), username: username});
+                    loginContainer.style.display = "none";
+                    isLogin = true;
+                }
+                else{
+                    alert("名字不能为空");
+                }
+            }
+            function send(){
+                if(isLogin==false){
+                    alert("您未登录！");
+                    window.href = "/";
+                    return;
+                }
+                var content = document.getElementById("message").value;
+                if(content != ''){
+                    var obj = {
+                        userid: userid,
+                        username: username,
+                        content: content
+                    };
+                    socket.emit('message', obj);
+                    document.getElementById("message").value = '';
+                }
+                document.getElementById("message").value = '';
+                return false;
+            }
+            return{
+                init: init,
+                send: send,
+                login: login
+            }
+        })();
+        Chat.init();
+    </script>
+</body>
+</html>
