@@ -18,7 +18,17 @@
             height: 60%;
             margin: 0 auto;
             background: #eee;
-            overflow: auto;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .full{
+            width: 100%;
+            height: auto;
+        }
+        .full div{
+            width: 100%;
+            height: auto;
+            word-wrap: break-word;
         }
         button{
             width: 60px;
@@ -41,8 +51,8 @@
         <span class="title">系统消息：</span>
         <span id="sys">暂无消息</span>
     </div>
-    <div class="container" id="content">
-
+    <div class="container" id="container">
+        <div class="full" id="content"></div>
     </div>
     <div class="input">
         <textarea id="message"></textarea>
@@ -62,6 +72,7 @@
             var isLogin = false;
             var sys = document.getElementById("sys");
             var content = document.getElementById("content");
+            var container = document.getElementById("container");
             var loginButton = document.getElementById("login");
             var message = document.getElementById("message");
             var submit = document.getElementById("submit");
@@ -70,9 +81,12 @@
             function init(){
                 socket = io.connect("ws://"+window.location.host);
                 socket.on('message', function(obj){
-                    var message = document.createElement("div");
-                    message.innerHTML = obj.username + "：" + obj.content;
-                    content.appendChild(message);
+                    var div = document.createElement("div");
+                    var p = document.createElement("p");
+                    p.innerHTML = obj.username + "：" + obj.content;
+                    div.appendChild(p);
+                    content.appendChild(div);
+                    container.scrollTop = container.scrollHeight;
                     console.log(obj);
                 });
                 socket.on('history', function(messages){
@@ -80,9 +94,12 @@
                     console.log(messages);
                     for(var x in messages){
                         var obj = messages[x];
-                        var message = document.createElement("div");
-                        message.innerHTML = obj.username + "：" + obj.content;
-                        content.appendChild(message);
+                        var div = document.createElement("div");
+                        var p = document.createElement("p");
+                        p.innerHTML = obj.username + "：" + obj.content;
+                        div.appendChild(p);
+                        content.appendChild(div);
+                        container.scrollTop = container.scrollHeight;
                     }
                     gettingHistory = false;
                 });
