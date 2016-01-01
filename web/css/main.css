@@ -180,7 +180,8 @@ i#toggle{
     position: relative;
 }
 .messages .message.self{
-    min-height: 77px;
+    overflow: hidden;
+    padding-bottom: 36px;
 }
 .messages .message.self .avatar{
     float: right;
@@ -219,7 +220,7 @@ i#toggle{
     top: -10px;
     left: 50px;
     width: auto;
-    max-width: 300px;
+    max-width: 600px;
     min-height: 30px;
     word-wrap: break-word;
     background: #fff;
@@ -244,9 +245,12 @@ div.send{
     background: #fafafa;
     bottom: 0;
 }
+div.send textarea::-webkit-scrollbar-thumb{
+    background: transparent;
+}
 div.send textarea{
     word-wrap: break-word;
-    width: 100%;
+    width: 98%;
     height: 90px;
     padding: 10px;
     padding-bottom: 30px;
@@ -303,6 +307,12 @@ div.send button:hover{
   div.messages{
     bottom: 60px;
   }
+  div.messages .message{
+    padding-bottom: 0;
+  }
+  div.messages .message div.content{
+    max-width: 270px;
+  }
   div.messages.typing{
     bottom: 235px;
   }
@@ -319,7 +329,7 @@ div.send button:hover{
   }
   div.send textarea{
     height: 5px;
-    width: 100%;
+    width: -webkit-calc(100% - 110px);
     margin-right: 100px;
   }
   div.send textarea:focus{
