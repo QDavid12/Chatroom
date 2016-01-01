@@ -1,0 +1,334 @@
+/* global */
+*{
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+html, body{
+    width: 100%;
+    height: 100%;
+    font-size: 1.1em;
+}
+div#chat, div#chat .full{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.ease{    
+    transition: all ease 0.3s;
+    -webkit-transition: all ease 0.3s;
+    -o-transition: all ease 0.3s;
+    -ms-transition: all ease 0.3s;
+}
+body{
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    overflow: hidden;
+    background: url(/img/bg.jpg) no-repeat center;
+    background-size: cover;
+    font-family: "Helvetica Neue",Helvetica,"Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    transition: all ease 0.3s;
+    -webkit-transition: all ease 0.3s;
+}
+/* scroll */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 10px;
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+::-webkit-scrollbar-track {
+  /* background: #FF66D5; */
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 4px;
+}
+/* framework */
+.sidebar{
+    width: 250px;
+    height: 100%;
+    position: absolute;
+    overflow-x: hidden;
+    background: #333;
+}
+.sidebar .head span{
+    position: absolute;
+    top: 90px;
+    z-index: 1;
+    right: 10px;
+    color: #ddd;
+    padding: 3px 5px;
+    font-size: 14px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    background-color: #222;
+    cursor: pointer;
+}
+.sidebar .head span:hover{
+    background: #313131;
+}
+.sidebar .head input{
+    border-radius: 3px;
+    padding: 3px 5px 5px 5px;
+    position: absolute;
+    left: 12px;
+    top: 90px;
+    z-index: 1;
+    background-color: #555;
+    color: #eee;
+    outline: none;
+    width: 180px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.sidebar .online-users{
+    position: absolute;
+    height: auto;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    top: 130px;
+    bottom: 0;
+    background: #383838;
+}
+.sidebar .online-users .user:first-child{
+    border-top: 2px solid #2a2a2a;
+}
+.sidebar .online-users .user{
+    position: relative;
+    padding: 10px;
+    border-bottom: 2px solid #2a2a2a;
+}
+.sidebar .online-users .name{
+    color: white;
+    margin-left: 5px;
+    color: #ddd;
+}
+.sidebar .online-users .time{
+    position: absolute;
+    color: #aaa;        
+    font-size: 16px;
+    top: 19px;
+    right: 10px;
+}
+.sidebar .online-users .avatar{
+    display: inline-block;
+    width: 40px;
+    height: 33px;
+    border-radius: 5px;
+    background: #ccc;
+    text-align: center;
+    padding-top: 7px;
+}
+.sidebar .head .avatar{
+    display: inline-block;
+    margin: 20px 0 0 20px;
+    width: 60px;
+    height: 43px;
+    border-radius: 5px;
+    background: #ccc;
+    text-align: center;
+    padding: 10px 0 4px 0;
+    font-size: 30px;
+}
+.sidebar .head .username{
+    display: inline-block;
+    position: absolute;
+    left: 100px;
+    top: 32px;
+    color: #eee;
+}
+.container{
+    position: relative;
+    width: auto;
+    height: 100%;
+    margin-left: 250px;
+    background: #f1f1f1;
+    overflow: hidden;
+}
+.container div.title{
+    position: absolute;
+    padding: 10px 0;
+    background: #ddd;
+    color: #888;
+    font-size: 1.2em;
+    text-align: center;
+    top: 0;
+    width: 100%;
+}
+i#toggle{
+    display: none;
+    margin-left: 10px;
+}
+.messages{
+    position: absolute;
+    width: 100%;
+    height: auto;
+    background: #f1f1f1;
+    top: 47px;
+    bottom: 205px;
+    padding-top: 0px;
+    padding-bottom: 25px;
+    overflow-x: hidden;
+}
+.messages .message{
+    padding: 0 10px;
+    position: relative;
+}
+.messages .message.self{
+    min-height: 77px;
+}
+.messages .message.self .avatar{
+    float: right;
+}
+.messages .message.self .info{
+    right: 62px;
+    left: auto;
+}
+.messages .message.self .content{
+    float: right;
+    top: 30px;
+    right: 10px;
+    left: auto;
+    background: #b2e281;
+}
+.messages .message .avatar{
+    position: relative;
+    width: 40px;
+    top: 12px;
+    height: 33px;
+    border-radius: 5px;
+    background: #ccc;
+    text-align: center;
+    padding-top: 7px;
+}
+.messages .message div.info{
+    position: absolute;
+    left: 62px;
+    top: 10px;
+    color: #666;
+    font-size: 12px;
+}
+.messages .message div.content{
+    position: relative;
+    display: inline-block;
+    top: -10px;
+    left: 50px;
+    width: auto;
+    max-width: 300px;
+    min-height: 30px;
+    word-wrap: break-word;
+    background: #fff;
+    padding: 5px 10px 2px 10px;
+    border-radius: 5px;
+    font-size: 1em;
+    line-height: 1.4em;
+    text-align: left;
+}
+.messages .message div.content:before, .messages .message div.content:after {
+    position: absolute;
+    top: 14px;
+    border: 6px solid transparent;
+    content: " ";
+}
+div.send{
+    position: absolute;
+    border-top: 1px solid #ddd;
+    padding-top: 1px;
+    width: 100%;
+    height: 200px;
+    background: #fafafa;
+    bottom: 0;
+}
+div.send textarea{
+    word-wrap: break-word;
+    width: 100%;
+    height: 90px;
+    padding: 10px;
+    padding-bottom: 30px;
+    font-size: 1.2em;
+    outline: none;
+    resize: none;
+    background: transparent;
+}
+div.send button{
+    display: block;
+    position: absolute;
+    right: 25px;
+    bottom: 20px;
+    width: 100px;
+    height: 40px;
+    font-size: 21px;
+    background: #fff;
+    border-radius: 5px;
+    color: #666;
+    border: 1px solid #999;
+    cursor: pointer;
+}
+div.send button:hover{
+    background: #fafafa;
+}
+@media screen and (max-width: 1000px) {
+  body {
+    zoom: 2.5;
+    background: white;
+  }
+  div.full{
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .sidebar{
+    position: absolute;
+    width: 0;
+  }
+  .sidebar.toggle{
+    width: 250px;
+  }
+  .container{
+    width: 100%;
+    margin-left: 0;
+    position: relative;
+  }
+  .container.toggle{
+    margin-left: 250px;
+  }
+  .container .title{
+    position: relative;
+  }
+  div.messages{
+    bottom: 60px;
+  }
+  div.messages.typing{
+    bottom: 235px;
+  }
+  div.send{
+    position: absolute;
+    bottom: 0;
+    height: auto;
+  }
+  div.send button{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 80px;
+  }
+  div.send textarea{
+    height: 5px;
+    width: 100%;
+    margin-right: 100px;
+  }
+  div.send textarea:focus{
+    height: 180px;
+  }
+  i#toggle{
+    display: block;
+    position: absolute;
+    font-size: 1.2em;
+    color: #666;
+  }
+}
